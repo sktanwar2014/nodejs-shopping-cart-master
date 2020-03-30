@@ -23,10 +23,14 @@ router.get('/add/:id', function(req, res, next) {
   var product = products.filter(function(item) {
     return item.id == productId;
   });
-  cart.add(product[0], productId);
-  req.session.cart = cart;
-  res.redirect('/');
-  inline();
+
+  cart.add(product[0], productId).then(result => {
+    req.session.cart = cart;
+    res.redirect('/');
+  
+    inline();
+  });
+
 });
 
 router.get('/cart', function(req, res, next) {

@@ -4,14 +4,19 @@ module.exports = function Cart(cart) {
     this.totalPrice = cart.totalPrice || 0;
 
     this.add = function(item, id) {
-        var cartItem = this.items[id];
-        if (!cartItem) {
-            cartItem = this.items[id] = {item: item, quantity: 0, price: 0};
-        }
-        cartItem.quantity++;
-        cartItem.price = cartItem.item.price * cartItem.quantity;
-        this.totalItems++;
-        this.totalPrice += cartItem.item.price;
+        const that = this;
+        return new Promise(function(resolve, reject) {
+            var cartItem = that.items[id];
+            if (!cartItem) {
+                cartItem = that.items[id] = {item: item, quantity: 0, price: 0};
+            }
+            cartItem.quantity++;
+            cartItem.price = cartItem.item.price * cartItem.quantity;
+            that.totalItems++;
+            that.totalPrice += cartItem.item.price;
+
+            resolve(cartItem);
+        })
     };
 
     this.remove = function(id) {
